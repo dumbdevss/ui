@@ -8,6 +8,7 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Skeleton({ circle, className, ...props }: SkeletonProps) {
   return (
     <div
+      role="presentation"
       className={cn(
         "bg-surface-2 animate-pulse shrink-0",
         circle ? "rounded-full" : "rounded-lg",
@@ -21,7 +22,7 @@ export function Skeleton({ circle, className, ...props }: SkeletonProps) {
 /** Pre-composed row skeleton: icon + two lines of text */
 export function SkeletonRow({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div role="presentation" className={cn("flex items-center gap-3", className)}>
       <Skeleton circle className="w-9 h-9" />
       <div className="flex-1 flex flex-col gap-2">
         <Skeleton className="h-3.5 w-28" />
@@ -31,19 +32,42 @@ export function SkeletonRow({ className }: { className?: string }) {
   );
 }
 
+interface SkeletonCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Number of skeleton rows in the body (ignored if children are provided) */
+  rows?: number;
+}
+
 /** Pre-composed card skeleton: header + body lines */
-export function SkeletonCard({ rows = 3 }: { rows?: number }) {
+export function SkeletonCard({
+  rows = 3,
+  children,
+  className,
+  ...props
+}: SkeletonCardProps) {
   return (
-    <div className="rounded-xl border border-line bg-surface overflow-hidden">
+    <div
+      role="status"
+      aria-busy="true"
+      aria-label="Loading content"
+      className={cn(
+        "rounded-xl border border-line bg-surface overflow-hidden",
+        className,
+      )}
+      {...props}
+    >
       <div className="px-5 py-4 border-b border-line flex flex-col gap-2">
         <Skeleton className="h-4 w-32" />
         <Skeleton className="h-3 w-48" />
       </div>
-      <div className="px-5 py-5 flex flex-col gap-4">
-        {Array.from({ length: rows }).map((_, i) => (
-          <Skeleton key={i} className="h-4 w-full" />
-        ))}
-      </div>
+      {children ? (
+        <div className="px-5 py-5">{children}</div>
+      ) : (
+        <div className="px-5 py-5 flex flex-col gap-4">
+          {Array.from({ length: rows }).map((_, i) => (
+            <Skeleton key={i} className="h-4 w-full" />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

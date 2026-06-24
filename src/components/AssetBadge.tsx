@@ -1,6 +1,6 @@
+import { Skeleton } from "@/components/ui/Skeleton";
 import type { Balance } from "@/lib/client";
-import { cn } from "@/lib/utils";
-import { truncateAddress } from "@/lib/utils";
+import { cn, truncateAddress } from "@/lib/utils";
 
 const ASSET_COLORS: Record<string, { bg: string; text: string }> = {
   XLM: { bg: "bg-[rgba(20,184,166,0.12)]", text: "text-teal" },
@@ -72,6 +72,22 @@ export function AssetBadge({
             </span>
           ) : null)}
       </div>
+    </div>
+  );
+}
+
+/** Skeleton placeholder matching AssetBadge + amount (card row layout) */
+export function AssetRowSkeleton() {
+  return (
+    <div className="flex items-center justify-between px-5 py-4 border-b border-line last:border-0">
+      <div className="flex items-center gap-2.5">
+        <Skeleton circle className="w-8 h-8" />
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-3.5 w-14" />
+          <Skeleton className="h-3 w-24" />
+        </div>
+      </div>
+      <Skeleton className="h-4 w-16" />
     </div>
   );
 }

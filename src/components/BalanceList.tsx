@@ -1,6 +1,5 @@
-import { AssetBadge } from "@/components/AssetBadge";
+import { AssetBadge, AssetRowSkeleton } from "@/components/AssetBadge";
 import { Badge } from "@/components/ui/Badge";
-import { SkeletonRow } from "@/components/ui/Skeleton";
 import { useSorokit } from "@/context/useSorokit";
 import type { Balance } from "@/lib/client";
 
@@ -40,7 +39,7 @@ export function BalanceList() {
       ) : isLoadingAccount ? (
         <div className="px-5 py-5 flex flex-col gap-4">
           {[1, 2, 3].map((i) => (
-            <SkeletonRow key={i} />
+            <AssetRowSkeleton key={i} />
           ))}
         </div>
       ) : balances.length === 0 ? (

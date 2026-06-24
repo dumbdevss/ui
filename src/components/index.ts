@@ -23,7 +23,7 @@ export { BalanceList } from "./BalanceList";
 export { WalletConnectButton } from "./WalletConnectButton";
 
 // Assets
-export { AssetBadge, AssetPill } from "./AssetBadge";
+export { AssetBadge, AssetPill, AssetRowSkeleton } from "./AssetBadge";
 
 // Address
 export { AddressDisplay } from "./AddressDisplay";
