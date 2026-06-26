@@ -1,4 +1,3 @@
-import { Skeleton } from "@/components/ui/Skeleton";
 import type { Balance } from "@/lib/client";
 import { cn, truncateAddress } from "@/lib/utils";
 
