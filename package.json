@@ -45,7 +45,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:exports": "tsc -p tsconfig.test-exports.json"
+    "test:exports": "tsc -p tsconfig.test-exports.json",
+    "size": "size-limit"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.1.2",
@@ -71,6 +72,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@size-limit/preset-small-lib": "^12.1.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^24.12.2",
@@ -83,10 +85,17 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
     "jsdom": "^29.1.1",
+    "size-limit": "^12.1.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10",
     "vite-plugin-dts": "^5.0.3",
     "vitest": "^3.0.5"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "dist/sorokit-ui.es.js",
+      "limit": "50 KB"
+    }
+  ]
 }
