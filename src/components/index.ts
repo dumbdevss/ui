@@ -18,6 +18,7 @@
  */
 
 // Export all components
+export { AssetBadge, AssetPill } from './AssetBadge';
 export { SorobanPanel } from './SorobanPanel';
 export { TransactionPanel } from './TransactionPanel';
 export { ErrorBoundary } from './ErrorBoundary';
