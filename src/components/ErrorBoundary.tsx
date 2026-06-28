@@ -33,13 +33,52 @@
  * 
  * @see https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
  */
-export function ErrorBoundary({ 
-  children, 
-  fallback, 
-  onError 
-}: ErrorBoundaryProps) {
-  // Component implementation
+import React from "react";
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
 }
+
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    if (this.props.onError) this.props.onError(error);
+    // Could log errorInfo if needed
+  }
+
+  render() {
+    if (this.state.hasError) {
++      const isDev = import.meta.env?.DEV ?? false;
++      const message = isDev && this.state.error
++        ? this.state.error.message
++        : "See the browser console for details.";
++      const content = this.props.fallback ?? (
++        <div className="p-4 bg-red-100 text-red-800 rounded">
++          <p className="text-sm font-medium">An unexpected error occurred.</p>
++          <p className="text-xs font-mono break-all mt-2" aria-live="polite">{message}</p>
++        </div>
++      );
++      return content;
++    }
++    return this.props.children;
++  }
+}
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  onError?: (error: Error) => void;
+}
+
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
