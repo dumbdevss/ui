@@ -22,6 +22,8 @@ export { SorobanPanel } from './SorobanPanel';
 export { TransactionPanel } from './TransactionPanel';
 export { ErrorBoundary } from './ErrorBoundary';
 export type { ErrorBoundaryProps } from './ErrorBoundary';
+export { AddressDisplay } from './AddressDisplay';
+export { AssetPill } from './AssetBadge';
 export { FeeEstimator } from './FeeEstimator';
 export type { FeeEstimatorProps } from './FeeEstimator';
 export { ContractEventFeed } from './ContractEventFeed';
@@ -33,4 +35,12 @@ export { useClient } from './hooks/useClient';
 
 // Export types
 export type { SorokitClient } from '../lib/client';
-export type { Transaction, ContractEvent } from '../lib/types';
+export type {
+  AccountData,
+  Balance,
+  Transaction,
+  ClaimableBalance,
+  ContractEvent,
+  NetworkInfo,
+  InvokeParams,
+} from '../lib/client';
