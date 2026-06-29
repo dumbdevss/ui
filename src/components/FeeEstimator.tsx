@@ -44,7 +44,7 @@ export function FeeEstimator({
   // Component implementation
 }
 
-interface FeeEstimatorProps {
+export interface FeeEstimatorProps {
   operations?: number;
   network: 'testnet' | 'public';
   onEstimate?: (fee: string) => void;

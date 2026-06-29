@@ -41,7 +41,7 @@ export function ErrorBoundary({
   // Component implementation
 }
 
-interface ErrorBoundaryProps {
+export interface ErrorBoundaryProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
   onError?: (error: Error) => void;

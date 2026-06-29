@@ -36,7 +36,7 @@ export default defineConfig({
         },
       },
     },
-    minify: 'terser',
+    minify: 'esbuild',
     sourcemap: true,
     // Preserve specific directory structure
     outDir: 'dist',

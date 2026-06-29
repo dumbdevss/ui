@@ -39,16 +39,18 @@
  * @see {@link SorokitProvider} for setup
  * @see GitHub issue #8 for QR code scanner limitation
  */
-export function ContractEventFeed({ 
-  contractId, 
-  limit = 100, 
-  autoRefresh = 5000, 
-  onEventClick 
+import type { ContractEvent } from '@/lib/client';
+
+export function ContractEventFeed({
+  contractId,
+  limit = 100,
+  autoRefresh = 5000,
+  onEventClick
 }: ContractEventFeedProps) {
   // Component implementation
 }
 
-interface ContractEventFeedProps {
+export interface ContractEventFeedProps {
   contractId: string;
   limit?: number;
   autoRefresh?: number;
