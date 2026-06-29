@@ -5,7 +5,7 @@
   "description": "React components for Stellar/Soroban development",
   "main": "dist/sorokit-ui.cjs.js",
   "module": "dist/sorokit-ui.es.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/components/index.d.ts",
   "files": [
     "dist",
     "README.md",
@@ -15,13 +15,13 @@
     ".": {
       "import": "./dist/sorokit-ui.es.js",
       "require": "./dist/sorokit-ui.cjs.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/components/index.d.ts"
     },
     "./styles": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build --config vite.lib.config.ts && tsc --emitDeclarationOnly",
+    "build": "vite build --config vite.lib.config.ts",
     "build:app": "vite build",
     "preview": "vite preview",
     "test": "vitest run",

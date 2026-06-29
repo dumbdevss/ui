@@ -19,7 +19,7 @@ export default defineConfig({
     tsconfigPath: path.resolve(__dirname, "tsconfig.app.json"),
     entryRoot: path.resolve(__dirname, "src"),
     outDir: "dist",
-    include: ["src/components", "src/lib/utils.ts"],
+    include: ["src/components", "src/lib"],
   })],
   build: {
     lib: {
@@ -43,7 +43,7 @@ export default defineConfig({
         },
       },
     },
-    minify: 'terser',
+    minify: 'esbuild',
     sourcemap: true,
     // Preserve specific directory structure
     outDir: 'dist',

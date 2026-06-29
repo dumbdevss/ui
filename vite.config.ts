@@ -25,7 +25,7 @@ export default defineConfig({
         dir: 'dist',
       },
     },
-    minify: 'terser',
+    minify: 'esbuild',
     sourcemap: true,
   },
   resolve: {
