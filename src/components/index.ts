@@ -18,6 +18,8 @@
  */
 
 // Export all components
+export { AddressDisplay } from './AddressDisplay';
+export type { AddressDisplayProps } from './AddressDisplay';
 export { SorobanPanel } from './SorobanPanel';
 export { TransactionPanel } from './TransactionPanel';
 export { ErrorBoundary } from './ErrorBoundary';
