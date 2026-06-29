@@ -1,9 +1,8 @@
-import { ConnectScreen } from './screens/ConnectScreen';
-import { Dashboard } from './screens/Dashboard';
-
 import { SorokitProvider } from './context/SorokitProvider';
 import { useSorokit } from './context/useSorokit';
 import type { SorokitClient } from './lib/client';
+import { ConnectScreen } from './screens/ConnectScreen';
+import { Dashboard } from './screens/Dashboard';
 
 interface AppProps {
   client: SorokitClient;

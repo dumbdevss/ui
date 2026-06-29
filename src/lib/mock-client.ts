@@ -1,4 +1,4 @@
-import type { SorokitClient, NetworkInfo, NetworkName, AccountData, Balance, Transaction, ContractEvent, TxResult, TxStatus, InvokeParams } from './client';
+import type { AccountData, Balance, InvokeParams, NetworkInfo, NetworkName, SorokitClient, TxStatus } from './client';
 import { deterministicMock } from './deterministic-mock';
 
 // Valid Stellar testnet address (56 chars: G + 55 uppercase alphanumeric)

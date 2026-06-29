@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { createMockClient } from "@/lib/mock-client";
-import type { SorokitClient } from "@/lib/client";
 import { useSorokit } from "@/context/useSorokit";
+import type { SorokitClient } from "@/lib/client";
+import { createMockClient } from "@/lib/mock-client";
 
 import App from "./App";
 

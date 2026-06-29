@@ -15,7 +15,12 @@ import dts from "vite-plugin-dts";
  * Use with: vite build --config vite.lib.config.ts
  */
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss(), dts({
+    tsconfigPath: path.resolve(__dirname, "tsconfig.app.json"),
+    entryRoot: path.resolve(__dirname, "src"),
+    outDir: "dist",
+    include: ["src/components", "src/lib/utils.ts"],
+  })],
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/components/index.ts'),
