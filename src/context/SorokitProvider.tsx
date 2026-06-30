@@ -39,6 +39,7 @@ export function SorokitProvider({ client, children }: SorokitProviderProps) {
     let active = true;
     const timerId = window.setTimeout(() => {
       setIsLoadingAccount(true);
+      setError(null);
       Promise.all([
         client.account.getAccount(address),
         client.account.getBalances(address),
@@ -46,9 +47,13 @@ export function SorokitProvider({ client, children }: SorokitProviderProps) {
         .then(([accountRes, balancesRes]) => {
           if (!active) return;
           if (accountRes.data) setAccount(accountRes.data);
-          if (accountRes.error) setError(accountRes.error);
           if (balancesRes.data) setBalances(balancesRes.data);
-          if (balancesRes.error) setError(balancesRes.error);
+          // Keep first non-null error instead of overwriting
+          if (accountRes.error) {
+            setError(accountRes.error);
+          } else if (balancesRes.error) {
+            setError(balancesRes.error);
+          }
         })
         .finally(() => {
           if (active) setIsLoadingAccount(false);
@@ -106,25 +111,33 @@ export function SorokitProvider({ client, children }: SorokitProviderProps) {
   const refreshAccount = useCallback(async () => {
     if (!address) return;
     setIsLoadingAccount(true);
+    setError(null);
     try {
       const [accountRes, balancesRes] = await Promise.all([
         client.account.getAccount(address),
         client.account.getBalances(address),
       ]);
       if (accountRes.data) setAccount(accountRes.data);
-      if (accountRes.error) setError(accountRes.error);
       if (balancesRes.data) setBalances(balancesRes.data);
-      if (balancesRes.error) setError(balancesRes.error);
+      // Keep first non-null error instead of overwriting
+      if (accountRes.error) {
+        setError(accountRes.error);
+      } else if (balancesRes.error) {
+        setError(balancesRes.error);
+      }
     } finally {
       setIsLoadingAccount(false);
     }
   }, [address, client]);
+
+  const isLoading = isConnecting || isLoadingAccount;
 
   const value = useMemo(
     () => ({
       address,
       isConnected: !!address,
       isConnecting,
+      isLoading,
       connectWallet,
       disconnectWallet,
       account,
@@ -139,6 +152,7 @@ export function SorokitProvider({ client, children }: SorokitProviderProps) {
     [
       address,
       isConnecting,
+      isLoading,
       connectWallet,
       disconnectWallet,
       account,
