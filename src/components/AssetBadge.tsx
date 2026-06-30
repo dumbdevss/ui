@@ -1,6 +1,6 @@
+import type { Balance } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { truncateAddress } from "@/lib/utils";
-import type { Balance } from "@/lib/client";
 
 // Hoisted outside module so objects are created once, never on render
 const ASSET_COLORS: Record<string, { bg: string; text: string }> = {

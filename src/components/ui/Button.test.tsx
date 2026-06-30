@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect,it } from "vitest";
+
 import { Button } from "./Button";
 
 describe("Button", () => {
@@ -10,6 +11,7 @@ describe("Button", () => {
 
   it("renders a loading spinner when loading is true", () => {
     const { container } = render(<Button loading>Submit</Button>);
+    expect(screen.getByRole("button", { name: /Submit/ })).toBeInTheDocument();
     // The spinner is a span with animate-spin class
     const spinner = container.querySelector(".animate-spin");
     expect(spinner).toBeInTheDocument();
@@ -29,7 +31,7 @@ describe("Button", () => {
 
   it("is disabled when loading is true", () => {
     render(<Button loading>Submit</Button>);
-    const button = screen.getByRole("button");
+    const button = screen.getByRole("button", { name: /Submit/ });
     expect(button).toBeDisabled();
   });
 
