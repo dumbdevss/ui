@@ -25,7 +25,7 @@ function RefreshIcon() {
 }
 
 export function AccountScreen() {
-  const { isConnected, isLoadingAccount, refreshAccount } = useSorokit();
+  const { isConnected, isLoadingAccount, refreshAccount, network, balances } = useSorokit();
 
   return (
     <div className="flex flex-col gap-5">
@@ -42,6 +42,16 @@ export function AccountScreen() {
             Refresh
           </Button>
         </div>
+      )}
+      {isConnected && network?.name === "testnet" && balances.length === 0 && (
+        <a
+          href="https://friendbot.stellar.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-primary underline"
+        >
+          Fund with Friendbot
+        </a>
       )}
       <AccountCard />
       <BalanceList />

@@ -39,15 +39,85 @@
  * @see {@link SorokitProvider} for setup
  * @see GitHub issue #8 for QR code scanner limitation
  */
-import type { ContractEvent } from '@/lib/client';
+import { useEffect, useState } from "react";
+import { getClient } from "@/lib/client";
+import type { ContractEvent } from "@/lib/client";
 
 export function ContractEventFeed({
   contractId,
   limit = 100,
   autoRefresh = 5000,
-  onEventClick
+  onEventClick,
 }: ContractEventFeedProps) {
-  // Component implementation
+  const [events, setEvents] = useState<ContractEvent[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number>(Date.now());
+
+  const fetchEvents = async () => {
+    setLoading(true);
+    try {
+      const { data, error: err } = await getClient().soroban.getEvents(contractId, limit);
+      if (err) {
+        setError(err);
+        setEvents(null);
+      } else {
+        setEvents(data);
+        setError(null);
+        setLastUpdated(Date.now());
+      }
+    } catch (e) {
+      setError((e as Error).message);
+      setEvents(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+    if (autoRefresh > 0) {
+      const interval = setInterval(fetchEvents, autoRefresh);
+      return () => clearInterval(interval);
+    }
+  }, [contractId, limit, autoRefresh]);
+
+  const relativeTime = () => {
+    const diffM = Math.floor((Date.now() - lastUpdated) / 60000);
+    return diffM === 0 ? "just now" : `${diffM}m ago`;
+  };
+
+  if (loading && !events) {
+    return <div className="animate-pulse">Loading...</div>;
+  }
+  if (error) {
+    return <div className="text-red">{error}</div>;
+  }
+  if (!events || events.length === 0) {
+    return <p className="text-ink-3">No events found</p>;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="text-xs text-ink-4">
+        Last updated: <span data-testid="last-updated">{relativeTime()}</span>
+      </div>
+      <ul className="list-none p-0 m-0 space-y-2">
+        {events.map((ev) => (
+          <li
+            key={ev.id}
+            className="cursor-pointer hover:bg-surface-2 p-2 rounded"
+            onClick={() => onEventClick?.(ev)}
+          >
+            <div className="text-sm font-medium">{ev.type}</div>
+            <div className="text-xs text-ink-3">
+              {new Date(ev.createdAt).toLocaleString()}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export interface ContractEventFeedProps {
