@@ -2,20 +2,29 @@ import type { Balance } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import { truncateAddress } from "@/lib/utils";
 
-// Hoisted outside module so objects are created once, never on render
-const ASSET_COLORS: Record<string, { bg: string; text: string }> = {
-  XLM: { bg: "bg-[rgba(20,184,166,0.12)]", text: "text-teal" },
-  USDC: { bg: "bg-[rgba(86,69,212,0.12)]", text: "text-brand" },
-  USDT: { bg: "bg-success-dim-strong", text: "text-green" },
-  BTC: { bg: "bg-[rgba(249,115,22,0.12)]", text: "text-orange" },
-  ETH: { bg: "bg-[rgba(168,85,247,0.12)]", text: "text-purple" },
-};
+const PALETTE = [
+  { bg: "bg-success-dim-strong", text: "text-green" },                      // 0: USDT (hash % 10 = 0)
+  { bg: "bg-[rgba(20,184,166,0.12)]", text: "text-teal" },                  // 1: XLM (hash % 10 = 1)
+  { bg: "bg-error-dim", text: "text-red" },                                  // 2: Red
+  { bg: "bg-[rgba(86,69,212,0.12)]", text: "text-brand" },                  // 3: USDC (hash % 10 = 3)
+  { bg: "bg-[rgba(236,72,153,0.12)]", text: "text-[rgb(236,72,153)]" },      // 4: Pink
+  { bg: "bg-[rgba(168,85,247,0.12)]", text: "text-purple" },                 // 5: ETH / WAVEX (hash % 10 = 5)
+  { bg: "bg-[rgba(6,182,212,0.12)]", text: "text-[rgb(6,182,212)]" },        // 6: Cyan
+  { bg: "bg-[rgba(249,115,22,0.12)]", text: "text-orange" },                 // 7: BTC (hash % 10 = 7)
+  { bg: "bg-[rgba(234,179,8,0.12)]", text: "text-[rgb(234,179,8)]" },        // 8: Yellow
+  { bg: "bg-[rgba(99,102,241,0.12)]", text: "text-[rgb(99,102,241)]" },      // 9: Indigo
+];
 
 // Stable fallback reference — no new object created on every cache miss
 const ASSET_COLOR_FALLBACK = { bg: "bg-surface-2", text: "text-ink-2" };
 
 function getAssetColor(code: string) {
-  return ASSET_COLORS[code] ?? ASSET_COLOR_FALLBACK;
+  let hash = 0;
+  for (let i = 0; i < code.length; i++) {
+    hash = code.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % 10;
+  return PALETTE[index];
 }
 
 interface AssetBadgeProps {
@@ -57,6 +66,7 @@ export function AssetBadge({
         className={cn(
           "rounded-full flex items-center justify-center font-bold shrink-0",
           iconSize,
+          "text-center leading-none",
           bg,
           text,
         )}

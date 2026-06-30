@@ -1,5 +1,5 @@
+import { forwardRef, cloneElement, isValidElement } from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -93,6 +93,41 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const sizeClass = iconOnly ? iconOnlySizes[size] : sizes[size];
 
+    if (asChild && isValidElement(children)) {
+      const child = children as React.ReactElement;
+      const childOnClick = child.props.onClick;
+      const wrappedChildren = cloneElement(child, {
+        onClick: (e: React.MouseEvent) => {
+          if (disabled || loading) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+          childOnClick?.(e);
+        },
+      });
+
+      return (
+        <Comp
+          ref={ref}
+          disabled={disabled || loading}
+          aria-busy={loading || undefined}
+          className={cn(
+            "inline-flex items-center justify-center font-medium rounded-lg transition-colors cursor-pointer select-none",
+            "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
+            "disabled:opacity-40 disabled:cursor-not-allowed",
+            variants[variant],
+            sizes[size],
+            className,
+          )}
+          onClick={handleClick}
+          {...props}
+        >
+          {wrappedChildren}
+        </Comp>
+      );
+    }
+
     return (
       <Comp
         ref={ref}
@@ -110,30 +145,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         onBlur={handleBlur}
         {...props}
       >
-        {asChild ? (
-          children
-        ) : (
-          <>
-            {/* Icon slot: shows spinner when loading, otherwise empty (icon passed as child) */}
-            {loading ? (
-              <>
-                <span
-                  aria-hidden="true"
-                  className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin shrink-0"
-                />
-                <span className="sr-only">Loading</span>
-              </>
-            ) : null}
-            {/* Label: always visible; shows confirmLabel on pending confirmation */}
-            {!iconOnly && (
-              <span>
-                {pendingConfirm ? confirmLabel : children}
-              </span>
-            )}
-            {/* Icon-only: render children directly (no label wrapper) */}
-            {iconOnly && !loading && children}
-          </>
+        {loading && (
+          <span
+            className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin shrink-0"
+          >
+            <span className="sr-only">Loading</span>
+          </span>
         )}
+        {children}
       </Comp>
     );
   },
