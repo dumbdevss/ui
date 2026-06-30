@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useSorokit } from "@/context/useSorokit";
 import type { Transaction } from "@/lib/client";
-import { getClient } from "@/lib/client";
+import { getClient, hasClient } from "@/lib/client";
 import { truncateAddress } from "@/lib/utils";
 
 const PAGE_SIZE = 10;
@@ -94,6 +94,7 @@ export function TransactionHistory() {
     let active = true;
     const timerId = window.setTimeout(() => {
       setLoading(true);
+      if (!hasClient()) { setError("[sorokit-ui] Client not initialized."); return; }
       getClient()
         .transaction.getHistory(address, page, PAGE_SIZE)
         .then(({ data, error: err, total: t }) => {
