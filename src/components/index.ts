@@ -31,5 +31,8 @@ export type { ContractEventFeedProps } from './ContractEventFeed';
 export { SorokitProvider } from '../context/SorokitProvider';
 export { useSorokit } from '../context/useSorokit';
 
+// Export primitive UI components
+export { Separator } from './ui/Separator';
+
 // Export types
 export type { SorokitClient, Transaction, ContractEvent } from '../lib/client';

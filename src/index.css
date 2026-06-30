@@ -165,6 +165,31 @@
 }
 
 /* ─────────────────────────────────────────────────────────
+   SKELETON SHIMMER ANIMATION
+───────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@layer utilities {
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface-2) 25%,
+      var(--color-surface-3) 50%,
+      var(--color-surface-2) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
    BASE STYLES
    Inside @layer base so Tailwind utilities always override.
 ───────────────────────────────────────────────────────── */
