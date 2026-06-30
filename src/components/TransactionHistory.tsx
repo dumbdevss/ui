@@ -26,8 +26,15 @@ function TxRow({ tx }: { tx: Transaction }) {
     day: "numeric",
   });
 
+  const memoTruncated =
+    tx.memo && tx.memo.length > 20 ? `${tx.memo.slice(0, 20)}…` : tx.memo;
+
   return (
-    <div className="flex items-center justify-between px-5 py-3.5 border-b border-line last:border-0 gap-4">
+    <article
+      role="listitem"
+      aria-label={`Transaction ${truncateAddress(tx.hash, 10, 6)}, ${tx.successful ? "successful" : "failed"}, ledger ${tx.ledger}, fee ${tx.feePaid} stroops`}
+      className="flex items-center justify-between px-5 py-3.5 border-b border-line last:border-0 gap-4"
+    >
       <div className="flex items-center gap-3 min-w-0">
         {/* Status icon */}
         <div
@@ -48,8 +55,13 @@ function TxRow({ tx }: { tx: Transaction }) {
           </span>
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-ink-3">Ledger {tx.ledger}</span>
+            <span className="text-[10px] text-ink-3">
+              · Fee: {tx.feePaid} stroops
+            </span>
             {tx.memo && (
-              <span className="text-[10px] text-ink-3">· {tx.memo}</span>
+              <span className="text-[10px] text-ink-3" title={tx.memo}>
+                · {memoTruncated}
+              </span>
             )}
           </div>
         </div>
@@ -63,7 +75,7 @@ function TxRow({ tx }: { tx: Transaction }) {
           {dateStr} {timeStr}
         </span>
       </div>
-    </div>
+    </article>
   );
 }
 
