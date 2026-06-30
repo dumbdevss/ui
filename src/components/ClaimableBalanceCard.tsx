@@ -83,13 +83,14 @@ export function ClaimableBalanceCard() {
   useEffect(() => {
     if (!address) return;
 
-    let active = true;
+    let cancelled = false;
     const timerId = window.setTimeout(() => {
       setLoading(true);
+      setError(null);
       getClient()
         .account.getClaimableBalances(address)
         .then(({ data, error: err }) => {
-          if (!active) return;
+          if (cancelled) return;
           if (err) {
             setError(err);
             return;
@@ -97,12 +98,13 @@ export function ClaimableBalanceCard() {
           setBalances(data ?? []);
         })
         .finally(() => {
-          if (active) setLoading(false);
+          if (cancelled) return;
+          setLoading(false);
         });
     }, 0);
 
     return () => {
-      active = false;
+      cancelled = true;
       window.clearTimeout(timerId);
     };
   }, [address]);
