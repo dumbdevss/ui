@@ -9,8 +9,20 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
+  "private": false,
+  "author": "sorokit contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Just-Bamford/sorokit-ui"
+  },
+  "bugs": {
+    "url": "https://github.com/Just-Bamford/sorokit-ui/issues"
+  },
+  "homepage": "https://github.com/Just-Bamford/sorokit-ui#readme",
   "exports": {
     ".": {
       "types": "./dist/components/index.d.ts",
@@ -91,5 +103,21 @@
       "limit": "65 kB",
       "gzip": true
     }
-  ]
+  ],
+  "peerDependencies": {
+    "@creit.tech/stellar-wallets-kit": ">=1.0.0",
+    "sorokit-core": ">=0.1.0",
+    "tailwindcss": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@creit.tech/stellar-wallets-kit": {
+      "optional": false
+    },
+    "sorokit-core": {
+      "optional": false
+    },
+    "tailwindcss": {
+      "optional": true
+    }
+  }
 }
