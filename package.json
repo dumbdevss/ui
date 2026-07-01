@@ -1,5 +1,28 @@
 {
   "name": "sorokit-ui",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "React components for Stellar/Soroban development",
+  "keywords": [
+    "stellar",
+    "soroban",
+    "react",
+    "components",
+    "dapp",
+    "defi",
+    "xlm",
+    "freighter",
+    "wallet-kit",
+    "soroban-contracts"
+  ],
+  "main": "dist/sorokit-ui.cjs.js",
+  "module": "dist/sorokit-ui.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   "private": false,
   "version": "0.1.0",
   "description": "React component library for Stellar — drop-in UI primitives for wallet connection, transaction flows, account display, and Soroban contract interaction.",
