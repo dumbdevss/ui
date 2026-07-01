@@ -34,6 +34,16 @@ export function AccountScreen() {
           </Button>
         </div>
       )}
+      {isConnected && network?.name === "testnet" && balances.length === 0 && (
+        <a
+          href="https://friendbot.stellar.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-primary underline"
+        >
+          Fund with Friendbot
+        </a>
+      )}
       <AccountCard />
       <BalanceList />
       <ClaimableBalanceCard />
