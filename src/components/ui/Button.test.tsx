@@ -19,6 +19,11 @@ expect(screen.getByRole("button", { name: /Submit/i })).toBeInTheDocument();
     expect(spinner).toBeInTheDocument();
   });
 
+  it("keeps the label visible when loading", () => {
+    render(<Button loading>Submit</Button>);
+    expect(screen.getByText("Submit")).toBeInTheDocument();
+  });
+
   it("is disabled when disabled prop is true", () => {
     render(<Button disabled>Click me</Button>);
     const button = screen.getByRole("button", { name: "Click me" });

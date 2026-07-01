@@ -37,6 +37,9 @@ const PALETTE = [
   { bg: "bg-[rgba(99,102,241,0.12)]", text: "text-[rgb(99,102,241)]" },      // 9: Indigo
 ];
 
+// Stable fallback reference — no new object created on every cache miss
+const ASSET_COLOR_FALLBACK = { bg: "bg-surface-2", text: "text-ink-2" };
+
 function getAssetColor(code: string) {
   let hash = 0;
   for (let i = 0; i < code.length; i++) {

@@ -12,11 +12,18 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: Size;
   asChild?: boolean;
   loading?: boolean;
+  /** Makes the button square with no horizontal padding — use for icon-only buttons */
+  iconOnly?: boolean;
+  /** Requires a second click to confirm — renders confirmLabel on first click */
+  requireConfirm?: boolean;
+  /** Label shown on the first click when requireConfirm is true. Defaults to "Are you sure?" */
+  confirmLabel?: string;
   requireConfirm?: boolean;
   confirmLabel?: string;
   confirmTimeout?: number;
 }
 
+// Hoisted outside the component so the objects are never recreated on render
 const variants: Record<Variant, string> = {
   primary: "bg-brand text-white hover:bg-brand-hover",
   secondary: "bg-transparent text-ink border border-line-2 hover:bg-surface-2",
@@ -31,6 +38,12 @@ const sizes: Record<Size, string> = {
   lg: "h-10 px-5 text-[14px] gap-2",
 };
 
+const iconOnlySizes: Record<Size, string> = {
+  sm: "h-8 w-8 text-[12px]",
+  md: "h-9 w-9 text-[13px]",
+  lg: "h-10 w-10 text-[14px]",
+};
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -38,6 +51,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "md",
       asChild,
       loading,
+      iconOnly,
+      requireConfirm,
+      confirmLabel = "Are you sure?",
       className,
       disabled,
       children,
@@ -61,6 +77,38 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       };
     }, []);
 
+    const [pendingConfirm, setPendingConfirm] = useState(false);
+
+    const handleClick = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (disabled || loading) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+
+        if (requireConfirm && !pendingConfirm) {
+          setPendingConfirm(true);
+          return;
+        }
+
+        // Reset confirmation state and fire the real handler
+        setPendingConfirm(false);
+        onClick?.(e);
+      },
+      [disabled, loading, requireConfirm, pendingConfirm, onClick],
+    );
+
+    // Reset confirm state if the button loses focus while waiting for confirmation
+    const handleBlur = useCallback(
+      (e: React.FocusEvent<HTMLButtonElement>) => {
+        if (pendingConfirm) setPendingConfirm(false);
+        props.onBlur?.(e);
+      },
+      [pendingConfirm, props],
+    );
+
+    const sizeClass = iconOnly ? iconOnlySizes[size] : sizes[size];
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled || loading) {
         e.preventDefault();
@@ -137,10 +185,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand",
           "disabled:opacity-40 disabled:cursor-not-allowed",
           variants[variant],
-          sizes[size],
+          sizeClass,
           className,
         )}
         onClick={handleClick}
+        onBlur={handleBlur}
         {...props}
       >
         {asChild ? (
