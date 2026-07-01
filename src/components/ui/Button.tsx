@@ -1,3 +1,4 @@
+import { forwardRef, useState, useEffect, useRef } from "react";
 import { forwardRef, cloneElement, isValidElement } from "react";
 import { Slot } from "@radix-ui/react-slot";
 
@@ -11,6 +12,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: Size;
   asChild?: boolean;
   loading?: boolean;
+  requireConfirm?: boolean;
+  confirmLabel?: string;
+  confirmTimeout?: number;
 }
 
 const variants: Record<Variant, string> = {
@@ -38,11 +42,24 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       children,
       onClick,
+      requireConfirm = false,
+      confirmLabel,
+      confirmTimeout = 3000,
       ...props
     },
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
+    const [isConfirming, setIsConfirming] = useState(false);
+    const timeoutRef = useRef<number | null>(null);
+
+    useEffect(() => {
+      return () => {
+        if (timeoutRef.current) {
+          window.clearTimeout(timeoutRef.current);
+        }
+      };
+    }, []);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled || loading) {
@@ -50,9 +67,31 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         e.stopPropagation();
         return;
       }
-      onClick?.(e);
+
+      if (requireConfirm) {
+        if (isConfirming) {
+          if (timeoutRef.current) {
+            window.clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+          }
+          setIsConfirming(false);
+          onClick?.(e);
+        } else {
+          setIsConfirming(true);
+          if (timeoutRef.current) {
+            window.clearTimeout(timeoutRef.current);
+          }
+          timeoutRef.current = window.setTimeout(() => {
+            setIsConfirming(false);
+          }, confirmTimeout);
+        }
+      } else {
+        onClick?.(e);
+      }
     };
 
+    const displayLabel =
+      requireConfirm && isConfirming && confirmLabel ? confirmLabel : children;
     if (asChild && isValidElement(children)) {
       const child = children as React.ReactElement;
       const childOnClick = child.props.onClick;
@@ -104,6 +143,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         onClick={handleClick}
         {...props}
       >
+        {asChild ? (
+          displayLabel
+        ) : (
+          <>
+            {loading && (
+              <>
+                <span
+                  aria-hidden="true"
+                  className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin shrink-0"
+                />
+                <span className="sr-only">Loading</span>
+              </>
+            )}
+            {displayLabel}
+          </>
         {loading && (
           <span
             className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin shrink-0"
